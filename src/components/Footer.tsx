@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-5 lg:px-10 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-col items-center md:items-start gap-1">
-            <img src="/logo.png" alt="Fokus" className="h-[32px] w-auto" />
+            <img src="/logo.png" alt="Fokus Tecnologia" className="h-[32px] w-auto" />
             <span className="text-[12px] text-[var(--color-text-secondary)] tracking-[-0.008em]">
               Inovação em tecnologia para o seu dia a dia.
             </span>
