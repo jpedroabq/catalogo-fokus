@@ -3,12 +3,13 @@ interface VariantSelectorProps {
   options: string[]
   selected: string
   onSelect: (value: string) => void
+  formatOption?: (value: string) => string
 }
 
-export default function VariantSelector({ label, options, selected, onSelect }: VariantSelectorProps) {
+export default function VariantSelector({ label, options, selected, onSelect, formatOption }: VariantSelectorProps) {
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)] mb-2">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--color-text-secondary)] mb-2.5">
         {label}
       </p>
       <div className="flex flex-wrap gap-1.5">
@@ -16,13 +17,13 @@ export default function VariantSelector({ label, options, selected, onSelect }: 
           <button
             key={opt}
             onClick={() => onSelect(opt)}
-            className={`px-3 py-1.5 text-[12px] font-medium rounded-[8px] border transition-all ${
+            className={`px-3 md:px-4 py-[6px] md:py-[7px] text-[12px] md:text-[13px] font-semibold rounded-[980px] transition-all duration-300 ease-apple active:scale-[0.97] ${
               selected === opt
-                ? 'border-apple-blue bg-apple-blue/10 text-apple-blue'
-                : 'border-[var(--color-separator)] text-[var(--color-text-secondary)] hover:border-apple-blue'
+                ? 'bg-[#09090B] text-white'
+                : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[#E4E4E7]'
             }`}
           >
-            {opt}
+            {formatOption ? formatOption(opt) : opt}
           </button>
         ))}
       </div>

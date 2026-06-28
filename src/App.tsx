@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react'
-import { useTheme } from './hooks/useTheme'
 import { useProducts } from './hooks/useProducts'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -9,13 +8,34 @@ import Skeleton from './components/Skeleton'
 import Footer from './components/Footer'
 
 function App() {
-  useTheme()
   const { products, loading, error } = useProducts()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
+  const [selectedStorage, setSelectedStorage] = useState<string | null>(null)
+  const [selectedRam, setSelectedRam] = useState<string | null>(null)
 
   const brands = useMemo(
     () => [...new Set(products.map((p) => p.brand))].sort(),
+    [products]
+  )
+
+  const allStorages = useMemo(
+    () =>
+      [
+        ...new Set(
+          products.flatMap((p) => p.variants.map((v) => v.storage)).filter(Boolean)
+        ),
+      ].sort(),
+    [products]
+  )
+
+  const allRams = useMemo(
+    () =>
+      [
+        ...new Set(
+          products.flatMap((p) => p.variants.map((v) => v.ram)).filter(Boolean)
+        ),
+      ].sort(),
     [products]
   )
 
@@ -32,35 +52,58 @@ function App() {
           p.brand.toLowerCase().includes(q)
       )
     }
+    const hasAttributeFilter = selectedStorage || selectedRam
+    if (hasAttributeFilter) {
+      result = result.filter((p) =>
+        p.variants.some(
+          (v) =>
+            (!selectedStorage || v.storage === selectedStorage) &&
+            (!selectedRam || v.ram === selectedRam)
+        )
+      )
+    }
     return result
-  }, [products, selectedBrand, searchQuery])
+  }, [products, selectedBrand, searchQuery, selectedStorage, selectedRam])
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] transition-colors">
-      <Navbar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-      <Hero />
-      <FilterBar brands={brands} selectedBrand={selectedBrand} onSelectBrand={setSelectedBrand} />
-
-      {loading ? (
-        <Skeleton />
-      ) : error ? (
-        <div className="text-center py-20 px-5">
-          <p className="text-[17px] text-apple-red font-semibold">{error}</p>
-          <p className="text-[13px] text-[var(--color-text-secondary)] mt-2">
-            Verifique se a planilha está publicada como CSV.
-          </p>
-        </div>
-      ) : filtered.length === 0 ? (
-        <div className="text-center py-20 px-5">
-          <p className="text-[17px] text-[var(--color-text-secondary)]">
-            Nenhum produto encontrado.
-          </p>
-        </div>
-      ) : (
-        <ProductGrid products={filtered} />
-      )}
-
-      <Footer />
+    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] transition-colors duration-200">
+      <div className="fixed inset-0 bg-grain opacity-[0.03] pointer-events-none z-0" />
+      <div className="relative z-10">
+        <Navbar />
+        <main>
+          <Hero />
+          <FilterBar
+            brands={brands}
+            selectedBrand={selectedBrand}
+            onSelectBrand={setSelectedBrand}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            storages={allStorages}
+            selectedStorage={selectedStorage}
+            onSelectStorage={setSelectedStorage}
+            rams={allRams}
+            selectedRam={selectedRam}
+            onSelectRam={setSelectedRam}
+          />
+          {loading ? (
+            <div className="px-5 lg:px-10 pb-16 md:pb-20">
+              <div className="max-w-7xl mx-auto">
+                <Skeleton />
+              </div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20 px-5">
+              <p className="text-[17px] text-[#EF4444] font-semibold">{error}</p>
+              <p className="text-[13px] text-[var(--color-text-secondary)] mt-2">
+                Verifique se a planilha está publicada como CSV.
+              </p>
+            </div>
+          ) : (
+            <ProductGrid products={filtered} />
+          )}
+        </main>
+        <Footer />
+      </div>
     </div>
   )
 }

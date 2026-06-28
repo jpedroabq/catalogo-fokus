@@ -1,5 +1,13 @@
 import { ProductRow, GroupedProduct, ProductVariant } from '../types'
 
+function normalizeRam(val: string): string {
+  return val.replace(/\s*gb$/i, '').trim()
+}
+
+function normalizeStorage(val: string): string {
+  return val.replace(/\s*gb$/i, '').trim()
+}
+
 export function groupProducts(rows: ProductRow[]): GroupedProduct[] {
   const groups = new Map<string, GroupedProduct>()
 
@@ -21,17 +29,22 @@ export function groupProducts(rows: ProductRow[]): GroupedProduct[] {
 
     const group = groups.get(key)!
     const price = parseFloat(row.price) || 0
+    const stock = parseInt(row.stock, 10) || 0
+    const ram = normalizeRam(row.ram)
+    const storage = normalizeStorage(row.storage)
     const variant: ProductVariant = {
       color: row.color,
-      storage: row.storage,
-      ram: row.ram,
+      storage,
+      ram,
       price,
+      images: (row.imageurl ?? '').split(',').map((u) => u.trim()).filter(Boolean),
+      stock,
     }
 
     group.variants.push(variant)
     if (row.color && !group.colors.includes(row.color)) group.colors.push(row.color)
-    if (row.storage && !group.storages.includes(row.storage)) group.storages.push(row.storage)
-    if (row.ram && !group.rams.includes(row.ram)) group.rams.push(row.ram)
+    if (storage && !group.storages.includes(storage)) group.storages.push(storage)
+    if (ram && !group.rams.includes(ram)) group.rams.push(ram)
     if (price < group.minPrice) group.minPrice = price
     if (price > group.maxPrice) group.maxPrice = price
   }

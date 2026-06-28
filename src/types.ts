@@ -5,6 +5,8 @@ export interface ProductRow {
   storage: string
   ram: string
   price: string
+  imageurl: string
+  stock: string
 }
 
 export interface ProductVariant {
@@ -12,6 +14,8 @@ export interface ProductVariant {
   storage: string
   ram: string
   price: number
+  images: string[]
+  stock: number
 }
 
 export interface GroupedProduct {
