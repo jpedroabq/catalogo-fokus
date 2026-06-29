@@ -6,20 +6,11 @@ interface WhatsAppButtonProps {
   storage: string
   ram: string
   price: number
-  outOfStock: boolean
 }
 
-export default function WhatsAppButton({ outOfStock, ...props }: WhatsAppButtonProps) {
+export default function WhatsAppButton(props: WhatsAppButtonProps) {
   const message = WHATSAPP_MESSAGE(props.model, props.color, props.storage, props.ram, props.price)
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-
-  if (outOfStock) {
-    return (
-      <span className="inline-flex items-center justify-center w-full text-center bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] font-semibold text-[14px] md:text-[15px] py-[10px] md:py-[12px] px-6 rounded-[980px] cursor-not-allowed select-none">
-        Indisponível
-      </span>
-    )
-  }
 
   return (
     <a

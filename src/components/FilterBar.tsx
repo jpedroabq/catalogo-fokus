@@ -29,7 +29,7 @@ function FilterDropdown({
   formatOption?: (value: string) => string
 }) {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full md:w-auto">
       <select
         value={selected ?? ''}
         onChange={(e) => onSelect(e.target.value || null)}

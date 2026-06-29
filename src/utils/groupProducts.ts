@@ -32,6 +32,8 @@ export function groupProducts(rows: ProductRow[]): GroupedProduct[] {
     const stock = parseInt(row.stock, 10) || 0
     const ram = normalizeRam(row.ram)
     const storage = normalizeStorage(row.storage)
+    if (stock === 0) continue
+
     const variant: ProductVariant = {
       color: row.color,
       storage,
@@ -49,5 +51,5 @@ export function groupProducts(rows: ProductRow[]): GroupedProduct[] {
     if (price > group.maxPrice) group.maxPrice = price
   }
 
-  return Array.from(groups.values())
+  return Array.from(groups.values()).filter((g) => g.variants.length > 0)
 }

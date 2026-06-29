@@ -59,7 +59,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     || []
 
   const currentImage = images[imgIndex] || images[0] || ''
-  const outOfStock = currentVariant ? currentVariant.stock === 0 : true
 
   useEffect(() => {
     setImgFailed(false)
@@ -186,12 +185,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </div>
 
         <WhatsAppButton
-          model={product.model}
+          model={currentVariant ? `${product.brand} ${product.model}` : product.model}
           color={selectedColor}
           storage={selectedStorage}
           ram={selectedRam}
-          price={price}
-          outOfStock={outOfStock}
+          price={currentVariant?.price ?? product.minPrice}
         />
       </div>
 
