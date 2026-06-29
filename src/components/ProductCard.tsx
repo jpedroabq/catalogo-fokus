@@ -30,21 +30,51 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [swipeDir, setSwipeDir] = useState<'left' | 'right'>('right')
 
-  const colors = useMemo(
+  const allColors = useMemo(
     () => [...new Set(product.variants.map((v) => v.color).filter(Boolean))],
     [product.variants]
   )
-  const storages = useMemo(
+  const allStorages = useMemo(
     () => [...new Set(product.variants.map((v) => v.storage).filter(Boolean))],
     [product.variants]
   )
-  const rams = useMemo(
+  const allRams = useMemo(
     () => [...new Set(product.variants.map((v) => v.ram).filter(Boolean))],
     [product.variants]
   )
 
-  const sortedStorages = useMemo(() => sortStorage(storages), [storages])
-  const sortedRams = useMemo(() => [...rams].sort(), [rams])
+  const filteredColors = useMemo(
+    () => allColors.filter((c) =>
+      product.variants.some((v) =>
+        v.color === c &&
+        (!selectedStorage || v.storage === selectedStorage) &&
+        (!selectedRam || v.ram === selectedRam)
+      )
+    ),
+    [product.variants, selectedStorage, selectedRam, allColors]
+  )
+
+  const filteredStorages = useMemo(
+    () => sortStorage(allStorages.filter((s) =>
+      product.variants.some((v) =>
+        v.storage === s &&
+        (!selectedColor || v.color === selectedColor) &&
+        (!selectedRam || v.ram === selectedRam)
+      )
+    )),
+    [product.variants, selectedColor, selectedRam, allStorages]
+  )
+
+  const filteredRams = useMemo(
+    () => [...allRams].filter((r) =>
+      product.variants.some((v) =>
+        v.ram === r &&
+        (!selectedColor || v.color === selectedColor) &&
+        (!selectedStorage || v.storage === selectedStorage)
+      )
+    ).sort(),
+    [product.variants, selectedColor, selectedStorage, allRams]
+  )
 
   const currentVariant = product.variants.find(
     (v) =>
@@ -61,6 +91,33 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     || []
 
   const currentImage = images[imgIndex] || images[0] || ''
+
+  useEffect(() => {
+    const isExact = product.variants.some(
+      (v) => v.color === selectedColor && v.storage === selectedStorage && v.ram === selectedRam
+    )
+    if (isExact || product.variants.length === 0) return
+
+    const best = product.variants.find(
+      (v) => v.color === selectedColor && v.storage === selectedStorage
+    ) ?? product.variants.find(
+      (v) => v.color === selectedColor && v.ram === selectedRam
+    ) ?? product.variants.find(
+      (v) => v.storage === selectedStorage && v.ram === selectedRam
+    ) ?? product.variants.find(
+      (v) => v.color === selectedColor
+    ) ?? product.variants.find(
+      (v) => v.storage === selectedStorage
+    ) ?? product.variants.find(
+      (v) => v.ram === selectedRam
+    ) ?? product.variants[0]
+
+    if (best) {
+      setSelectedColor(best.color)
+      setSelectedStorage(best.storage)
+      setSelectedRam(best.ram)
+    }
+  }, [selectedColor, selectedStorage, selectedRam, product.variants])
 
   const goToPrevImage = useCallback(() => {
     if (images.length <= 1) return
@@ -180,27 +237,27 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </h3>
 
         <div className="space-y-3 flex-1">
-          {colors.length > 0 && (
+          {filteredColors.length > 0 && (
             <VariantSelector
               label="Cor"
-              options={colors}
+              options={filteredColors}
               selected={selectedColor}
               onSelect={setSelectedColor}
             />
           )}
-          {storages.length > 0 && (
+          {filteredStorages.length > 0 && (
             <VariantSelector
               label="Armazenamento"
-              options={sortedStorages}
+              options={filteredStorages}
               selected={selectedStorage}
               onSelect={setSelectedStorage}
               formatOption={(v) => /[GT]B$/i.test(v.replace(/\s/g, '')) ? v : `${v} GB`}
             />
           )}
-          {rams.length > 0 && (
+          {filteredRams.length > 0 && (
             <VariantSelector
               label="RAM"
-              options={sortedRams}
+              options={filteredRams}
               selected={selectedRam}
               onSelect={setSelectedRam}
               formatOption={(v) => `${v} GB`}
@@ -222,7 +279,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           color={selectedColor}
           storage={selectedStorage}
           ram={selectedRam}
-          price={currentVariant?.price ?? product.minPrice}
         />
       </div>
 
