@@ -13,6 +13,7 @@ function App() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null)
   const [selectedRam, setSelectedRam] = useState<string | null>(null)
+  const [sortOrder, setSortOrder] = useState<string | null>(null)
 
   const brands = useMemo(
     () => [...new Set(products.map((p) => p.brand))].sort(),
@@ -62,8 +63,13 @@ function App() {
         )
       )
     }
+    if (sortOrder === 'price-asc') {
+      result = [...result].sort((a, b) => a.minPrice - b.minPrice)
+    } else if (sortOrder === 'price-desc') {
+      result = [...result].sort((a, b) => b.minPrice - a.minPrice)
+    }
     return result
-  }, [products, selectedBrand, searchQuery, selectedStorage, selectedRam])
+  }, [products, selectedBrand, searchQuery, selectedStorage, selectedRam, sortOrder])
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] transition-colors duration-200">
@@ -84,6 +90,8 @@ function App() {
             rams={allRams}
             selectedRam={selectedRam}
             onSelectRam={setSelectedRam}
+            sortOrder={sortOrder}
+            onSortChange={setSortOrder}
           />
           {loading ? (
             <div className="px-5 lg:px-10 pb-16 md:pb-20">

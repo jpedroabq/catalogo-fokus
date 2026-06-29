@@ -13,6 +13,8 @@ interface FilterBarProps {
   rams: string[]
   selectedRam: string | null
   onSelectRam: (ram: string | null) => void
+  sortOrder: string | null
+  onSortChange: (order: string | null) => void
 }
 
 function FilterDropdown({
@@ -108,6 +110,8 @@ export default function FilterBar({
   rams,
   selectedRam,
   onSelectRam,
+  sortOrder,
+  onSortChange,
 }: FilterBarProps) {
   return (
     <>
@@ -133,6 +137,19 @@ export default function FilterBar({
           <div className="flex-1">
             <FilterDropdown label="RAM" options={rams} selected={selectedRam} onSelect={onSelectRam} formatOption={(v) => `${v} GB`} />
           </div>
+          <div className="flex-1">
+            <button
+              onClick={() => onSortChange(sortOrder === 'price-asc' ? 'price-desc' : sortOrder === 'price-desc' ? null : 'price-asc')}
+              className={`h-[38px] px-4 text-sm rounded-[980px] border font-semibold transition-all duration-200 flex items-center gap-1.5 shrink-0 ${
+                sortOrder
+                  ? 'bg-[#09090B] text-[#FAFAFA] border-[#09090B]'
+                  : 'bg-white text-[var(--color-text)] border-[var(--color-border)] hover:border-[#A1A1AA]'
+              }`}
+            >
+              Preço
+              {sortOrder === 'price-asc' ? <span>↑</span> : sortOrder === 'price-desc' ? <span className="inline-block rotate-180">↑</span> : <span className="text-[10px] leading-none">↑↓</span>}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -147,6 +164,17 @@ export default function FilterBar({
           <div className="flex items-center gap-1.5 shrink-0">
             <FilterDropdown label="Armazenamento" options={storages} selected={selectedStorage} onSelect={onSelectStorage} formatOption={(v) => /[GT]B$/i.test(v.replace(/\s/g, '')) ? v : `${v} GB`} />
             <FilterDropdown label="RAM" options={rams} selected={selectedRam} onSelect={onSelectRam} formatOption={(v) => `${v} GB`} />
+            <button
+              onClick={() => onSortChange(sortOrder === 'price-asc' ? 'price-desc' : sortOrder === 'price-desc' ? null : 'price-asc')}
+              className={`h-[38px] px-4 text-sm rounded-[980px] border font-semibold transition-all duration-200 flex items-center gap-1.5 shrink-0 ${
+                sortOrder
+                  ? 'bg-[#09090B] text-[#FAFAFA] border-[#09090B]'
+                  : 'bg-white text-[var(--color-text)] border-[var(--color-border)] hover:border-[#A1A1AA]'
+              }`}
+            >
+              {sortOrder === 'price-asc' ? <span>↑</span> : sortOrder === 'price-desc' ? <span>↓</span> : <span className="text-[10px] leading-none">↑↓</span>}
+              Preço
+            </button>
           </div>
         </div>
 

@@ -1,6 +1,7 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useSwipeable } from 'react-swipeable'
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import type { GroupedProduct } from '../types'
 import { BRAND_LOGOS } from '../brandLogos'
@@ -27,6 +28,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const [imgFailed, setImgFailed] = useState(false)
   const [imgIndex, setImgIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [swipeDir, setSwipeDir] = useState<'left' | 'right'>('right')
 
   const colors = useMemo(
     () => [...new Set(product.variants.map((v) => v.color).filter(Boolean))],
@@ -60,6 +62,31 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
   const currentImage = images[imgIndex] || images[0] || ''
 
+  const goToPrevImage = useCallback(() => {
+    if (images.length <= 1) return
+    setSwipeDir('right')
+    setImgIndex((i) => (i - 1 + images.length) % images.length)
+  }, [images.length])
+
+  const goToNextImage = useCallback(() => {
+    if (images.length <= 1) return
+    setSwipeDir('left')
+    setImgIndex((i) => (i + 1) % images.length)
+  }, [images.length])
+
+  const cardSwipeHandlers = useSwipeable({
+    onSwipedLeft: goToNextImage,
+    onSwipedRight: goToPrevImage,
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+  })
+
+  const lightboxSwipeHandlers = useSwipeable({
+    onSwipedLeft: goToNextImage,
+    onSwipedRight: goToPrevImage,
+    trackMouse: true,
+  })
+
   useEffect(() => {
     setImgFailed(false)
     setImgIndex(0)
@@ -88,42 +115,48 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       transition={{ duration: 0.5, delay: index * 0.06, ease: [0.25, 0.1, 0.25, 1] }}
       className="group relative bg-[var(--color-bg-secondary)] rounded-card overflow-hidden hover:shadow-apple-hover transition-all duration-400 ease-apple will-change-transform flex flex-col h-full"
     >
-      <div className="aspect-[4/3] shrink-0 relative overflow-hidden bg-[#E4E4E7] group/image">
+      <div className="aspect-[4/3] shrink-0 relative overflow-hidden bg-[#E4E4E7] select-none group/image" {...cardSwipeHandlers}>
         {currentImage && !imgFailed && (
           <button
             onClick={() => setLightboxOpen(true)}
             className="absolute inset-0 w-full h-full cursor-pointer"
           >
-            <img
-              key={currentImage}
-              src={currentImage}
-              alt={product.model}
-              className="w-full h-full object-cover transition-all duration-400 ease-apple"
-              onError={() => setImgFailed(true)}
-            />
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentImage}
+                src={currentImage}
+                alt={product.model}
+                initial={{ opacity: 0, x: swipeDir === 'left' ? 60 : -60 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: swipeDir === 'left' ? -60 : 60 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                className="w-full h-full object-cover"
+                onError={() => setImgFailed(true)}
+              />
+            </AnimatePresence>
           </button>
         )}
         {images.length > 1 && !imgFailed && (
           <>
             <button
-              onClick={() => setImgIndex((i) => (i - 1 + images.length) % images.length)}
-              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 text-[#09090B] opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 hover:bg-white shadow-apple-sm"
+              onClick={goToPrevImage}
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-white/80 text-[#09090B] opacity-100 md:opacity-0 md:group-hover/image:opacity-100 transition-opacity duration-200 hover:bg-white shadow-apple-sm"
             >
               <ChevronLeftIcon className="w-5 h-5" />
             </button>
             <button
-              onClick={() => setImgIndex((i) => (i + 1) % images.length)}
-              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 text-[#09090B] opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 hover:bg-white shadow-apple-sm"
+              onClick={goToNextImage}
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-white/80 text-[#09090B] opacity-100 md:opacity-0 md:group-hover/image:opacity-100 transition-opacity duration-200 hover:bg-white shadow-apple-sm"
             >
               <ChevronRightIcon className="w-5 h-5" />
             </button>
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 md:gap-1.5">
               {images.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setImgIndex(i)}
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${
-                    i === imgIndex ? 'bg-[#09090B] w-3' : 'bg-[#09090B]/40 hover:bg-[#09090B]/60'
+                  onClick={() => { setSwipeDir(i > imgIndex ? 'left' : 'right'); setImgIndex(i) }}
+                  className={`rounded-full transition-all duration-200 ${
+                    i === imgIndex ? 'w-3 h-3 md:w-1.5 md:h-1.5 bg-[#09090B]' : 'w-2 h-2 md:w-1.5 md:h-1.5 bg-[#09090B]/40 hover:bg-[#09090B]/60'
                   }`}
                 />
               ))}
@@ -197,8 +230,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
       {lightboxOpen && images.length > 0 && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 select-none"
           onClick={() => setLightboxOpen(false)}
+          {...lightboxSwipeHandlers}
         >
           <button
             onClick={() => setLightboxOpen(false)}
@@ -209,24 +243,32 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
           {images.length > 1 && (
             <button
-              onClick={(e) => { e.stopPropagation(); setImgIndex((i) => (i - 1 + images.length) % images.length) }}
+              onClick={(e) => { e.stopPropagation(); goToPrevImage() }}
               className="absolute left-4 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25 transition-colors"
             >
               <ChevronLeftIcon className="w-7 h-7" />
             </button>
           )}
 
-          <img
-            key={images[imgIndex]}
-            src={images[imgIndex]}
-            alt={product.model}
-            className="max-h-[85vh] max-w-[90vw] object-contain select-none"
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div className="max-h-[85vh] max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={images[imgIndex]}
+                src={images[imgIndex]}
+                alt={product.model}
+                initial={{ opacity: 0, x: swipeDir === 'left' ? 80 : -80 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: swipeDir === 'left' ? -80 : 80 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                className="max-h-[85vh] max-w-[90vw] object-contain select-none"
+                draggable={false}
+              />
+            </AnimatePresence>
+          </div>
 
           {images.length > 1 && (
             <button
-              onClick={(e) => { e.stopPropagation(); setImgIndex((i) => (i + 1) % images.length) }}
+              onClick={(e) => { e.stopPropagation(); goToNextImage() }}
               className="absolute right-4 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25 transition-colors"
             >
               <ChevronRightIcon className="w-7 h-7" />
@@ -238,9 +280,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               {images.map((_, i) => (
                 <button
                   key={i}
-                  onClick={(e) => { e.stopPropagation(); setImgIndex(i) }}
-                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                    i === imgIndex ? 'bg-white w-4' : 'bg-white/40 hover:bg-white/60'
+                  onClick={(e) => { e.stopPropagation(); setSwipeDir(i > imgIndex ? 'left' : 'right'); setImgIndex(i) }}
+                  className={`rounded-full transition-all duration-200 ${
+                    i === imgIndex ? 'w-3 h-3 bg-white' : 'w-2 h-2 bg-white/40 hover:bg-white/60'
                   }`}
                 />
               ))}
