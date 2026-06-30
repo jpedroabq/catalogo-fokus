@@ -10,7 +10,19 @@ export async function fetchProducts(): Promise<ProductRow[]> {
     Papa.parse<ProductRow>(csvText, {
       header: true,
       skipEmptyLines: true,
-      transformHeader: (h) => h.trim().toLowerCase(),
+      transformHeader: (h) => {
+        const map: Record<string, string> = {
+          marca: 'brand',
+          modelo: 'model',
+          cor: 'color',
+          armazenamento: 'storage',
+          ram: 'ram',
+          'preço': 'price',
+          estoque: 'stock',
+          imagens: 'imageurl',
+        }
+        return map[h.trim().toLowerCase()] ?? h.trim().toLowerCase()
+      },
       complete: (results) => {
         resolve(results.data.filter((row) => row.model && row.model.trim()))
       },
