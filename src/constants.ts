@@ -7,4 +7,5 @@ export const WHATSAPP_MESSAGE = (model: string, color: string, storage: string, 
   `Olá! Tenho interesse no ${model} (${color}, ${formatStorage(storage)}, ${formatRam(ram)}).`
 
 export const GOOGLE_SHEETS_CSV_URL =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaeEg0VdasYkjBU4bLpJ7FBMdWJq-sLTQzAMdIlQoEPTGBDU1kJTXM-fLMiDdL8w/pub?gid=1955490037&single=true&output=csv'
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sSqQZnN6aFQs0D1rU_oIzq4l587CUwq2k0Grn9XdlFF4Kt0uhxpnSBCrjnWwHJKd-LJz7xdQqzmt/pub?gid=1955490037&single=true&output=csv'
+ 
