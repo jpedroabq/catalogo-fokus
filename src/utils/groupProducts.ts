@@ -8,6 +8,14 @@ function normalizeStorage(val: string): string {
   return val.replace(/\s*gb$/i, '').trim()
 }
 
+function normalizePrice(val: string): number {
+  const cleaned = val
+    .replace(/^R?\$?\s*/i, '')
+    .replace(/\./g, '')
+    .replace(',', '.')
+  return parseFloat(cleaned) || 0
+}
+
 export function groupProducts(rows: ProductRow[]): GroupedProduct[] {
   const groups = new Map<string, GroupedProduct>()
 
@@ -28,7 +36,7 @@ export function groupProducts(rows: ProductRow[]): GroupedProduct[] {
     }
 
     const group = groups.get(key)!
-    const price = parseFloat(row.price) || 0
+    const price = normalizePrice(row.price)
     const stock = parseInt(row.stock, 10) || 0
     const ram = normalizeRam(row.ram)
     const storage = normalizeStorage(row.storage)
