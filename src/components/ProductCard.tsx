@@ -87,7 +87,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const images = currentVariant?.images.length
     ? currentVariant.images
     : product.variants.find((v) => v.color === selectedColor && v.images.length)?.images
-    || product.variants.find((v) => v.images.length)?.images
     || []
 
   const currentImage = images[imgIndex] || images[0] || ''
