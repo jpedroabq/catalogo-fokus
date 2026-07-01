@@ -169,7 +169,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.06, ease: [0.25, 0.1, 0.25, 1] }}
-      className="group relative bg-[var(--color-bg-secondary)] rounded-card overflow-hidden hover:shadow-apple-hover transition-all duration-400 ease-apple will-change-transform flex flex-col h-full"
+      className="group relative bg-[var(--color-bg-secondary)] rounded-card overflow-hidden hover:shadow-apple-hover transition-shadow duration-400 ease-apple will-change-transform flex flex-col h-full"
     >
       <div className="aspect-[4/3] shrink-0 relative overflow-hidden bg-[#E4E4E7] select-none group/image" {...cardSwipeHandlers}>
         {currentImage && !imgFailed && (
