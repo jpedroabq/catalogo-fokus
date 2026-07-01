@@ -9,6 +9,8 @@ export const WHATSAPP_MESSAGE = (model: string, color: string, storage: string, 
   return `Olá! Tenho interesse no ${model} (${parts.join(', ')}).`
 }
 
+export const WHATSAPP_CONTACT_MESSAGE = 'Olá! Gostaria de mais informações sobre os produtos de vocês.'
+
 export const GOOGLE_SHEETS_CSV_URL =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sSqQZnN6aFQs0D1rU_oIzq4l587CUwq2k0Grn9XdlFF4Kt0uhxpnSBCrjnWwHJKd-LJz7xdQqzmt/pub?gid=338374894&single=true&output=csv'
  

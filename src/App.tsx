@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useProducts } from './hooks/useProducts'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -14,6 +14,14 @@ function App() {
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null)
   const [selectedRam, setSelectedRam] = useState<string | null>(null)
   const [sortOrder, setSortOrder] = useState<string | null>(null)
+
+  const handleSortChange = useCallback(() => {
+    setSortOrder((current) => {
+      if (current === 'price-asc') return 'price-desc'
+      if (current === 'price-desc') return null
+      return 'price-asc'
+    })
+  }, [])
 
   const brands = useMemo(
     () => [...new Set(products.map((p) => p.brand))].sort(),
@@ -91,7 +99,7 @@ function App() {
             selectedRam={selectedRam}
             onSelectRam={setSelectedRam}
             sortOrder={sortOrder}
-            onSortChange={setSortOrder}
+            onSortChange={handleSortChange}
           />
           {loading ? (
             <div className="px-5 lg:px-10 pb-16 md:pb-20">

@@ -61,10 +61,10 @@ export default function VariantSelector({ label, options, selected, onSelect, fo
           <button
             key={opt}
             onClick={() => onSelect(opt)}
-            className={`px-3 md:px-4 py-[6px] md:py-[7px] text-[12px] md:text-[13px] font-semibold rounded-[980px] transition-all duration-300 ease-apple active:scale-[0.97] ${
+            className={`flex-1 min-w-0 max-w-[120px] px-3 md:px-4 py-[6px] md:py-[7px] text-[12px] md:text-[13px] font-semibold rounded-[980px] border transition-all duration-300 ease-apple active:scale-[0.97] whitespace-nowrap ${
               selected === opt
-                ? 'bg-[#09090B] text-white'
-                : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[#E4E4E7]'
+                ? 'border-[#09090B] bg-transparent text-[#09090B]'
+                : 'border-[var(--color-border)] bg-transparent text-[var(--color-text-secondary)] hover:border-[#A1A1AA]'
             }`}
           >
             {formatOption ? formatOption(opt) : opt}

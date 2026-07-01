@@ -264,22 +264,24 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           )}
         </div>
 
-        <div className="flex items-baseline gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--color-text-secondary)]">
-            R$
-          </span>
-          <span className="text-[20px] font-bold tracking-[-0.022em] text-[var(--color-text)] sm:text-[22px]">
-            {price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </span>
-        </div>
+        <div className="flex items-center justify-between gap-3 pt-10">
+          <div className="flex items-center gap-1">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--color-text-secondary)]">
+              R$
+            </span>
+            <span className="text-[20px] font-bold tracking-[-0.022em] text-[var(--color-text)] sm:text-[22px]">
+              {price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
 
-        <WhatsAppButton
-          model={currentVariant ? `${product.brand} ${product.model}` : product.model}
-          color={selectedColor}
-          storage={selectedStorage}
-          ram={selectedRam}
-          brand={product.brand}
-        />
+          <WhatsAppButton
+            model={currentVariant ? `${product.brand} ${product.model}` : product.model}
+            color={selectedColor}
+            storage={selectedStorage}
+            ram={selectedRam}
+            brand={product.brand}
+          />
+        </div>
       </div>
 
     </motion.div>

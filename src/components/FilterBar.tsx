@@ -205,7 +205,7 @@ export default function FilterBar({
 }: FilterBarProps) {
   return (
     <>
-      <div className="sticky top-16 z-[60] border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 px-4 py-3 shadow-sm backdrop-blur md:hidden sm:px-6">
+      <div className="sticky top-0 z-[60] border-b border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 shadow-sm md:hidden sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col gap-3">
           <div className="relative w-full">
             <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2 text-[var(--color-text-secondary)]" />
