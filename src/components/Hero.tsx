@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section className="relative pt-10 md:pt-28 pb-16 md:pb-20 lg:pb-24 px-5 lg:px-10 text-center">
+    <section className="relative pt-24 md:pt-28 pb-16 md:pb-20 lg:pb-24 px-5 lg:px-10 text-center">
       <div className="absolute inset-0 bg-grain opacity-30 pointer-events-none" />
 
       <div className="relative max-w-2xl mx-auto">

@@ -222,18 +222,18 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       </div>
 
       <div className="p-4 md:p-5 space-y-4 flex-1 flex flex-col relative">
-        {BRAND_LOGOS[product.brand.toLowerCase().trim()] && (
-          <div className="absolute top-4 md:top-5 right-4 md:right-5">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="text-[17px] font-semibold tracking-[-0.022em] text-[var(--color-text)] leading-tight min-w-0">
+            {product.model}
+          </h3>
+          {BRAND_LOGOS[product.brand.toLowerCase().trim()] && (
             <img
               src={BRAND_LOGOS[product.brand.toLowerCase().trim()]}
               alt=""
-              className="h-[18px] w-auto"
+              className="h-[18px] w-auto shrink-0 mt-[3px]"
             />
-          </div>
-        )}
-        <h3 className="text-[17px] font-semibold tracking-[-0.022em] text-[var(--color-text)] leading-tight">
-          {product.model}
-        </h3>
+          )}
+        </div>
 
         <div className="space-y-3 flex-1">
           {filteredColors.length > 0 && (
