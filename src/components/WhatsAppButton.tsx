@@ -5,10 +5,11 @@ interface WhatsAppButtonProps {
   color: string
   storage: string
   ram: string
+  brand: string
 }
 
 export default function WhatsAppButton(props: WhatsAppButtonProps) {
-  const message = WHATSAPP_MESSAGE(props.model, props.color, props.storage, props.ram)
+  const message = WHATSAPP_MESSAGE(props.model, props.color, props.storage, props.ram, props.brand)
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
 
   return (

@@ -278,6 +278,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           color={selectedColor}
           storage={selectedStorage}
           ram={selectedRam}
+          brand={product.brand}
         />
       </div>
 
