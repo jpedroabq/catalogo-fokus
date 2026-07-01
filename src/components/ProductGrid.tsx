@@ -17,12 +17,12 @@ export default function ProductGrid({ products }: ProductGridProps) {
   }
 
   return (
-    <div className="px-5 lg:px-10 pb-16 md:pb-20">
-      <div className="max-w-7xl mx-auto">
-        <p className="text-[13px] font-semibold text-[var(--color-text-secondary)] mb-5 tracking-[-0.008em]">
+    <div className="px-4 pb-16 sm:px-6 sm:pb-20 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <p className="mb-5 text-[13px] font-semibold tracking-[-0.008em] text-[var(--color-text-secondary)]">
           {products.length} {products.length === 1 ? 'modelo' : 'modelos'}
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 md:gap-5">
           {products.map((product, i) => (
             <ProductCard key={`${product.brand}-${product.model}-${i}`} product={product} index={i} />
           ))}

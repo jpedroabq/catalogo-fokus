@@ -42,7 +42,7 @@ function StaticLogo({ compact }: { compact?: boolean }) {
   const gap = compact ? 'gap-[4px]' : 'gap-[6px] md:gap-2'
   const subtitleSize = compact ? 'text-[8px]' : 'text-[9px] md:text-xs'
   const subtitleTracking = compact ? 'tracking-[3px]' : 'tracking-[4px] md:tracking-[6px]'
-  const align = compact ? 'flex-col items-end' : 'flex-col items-end md:ml-16'
+  const align = compact ? 'flex-col items-end' : 'flex-col items-end'
 
   return (
     <div className={`flex ${align}`}>
@@ -73,7 +73,7 @@ export default function AnimatedLogo({ compact, static: isStatic }: Props) {
   const gap = compact ? 'gap-[4px]' : 'gap-[6px] md:gap-2'
   const subtitleSize = compact ? 'text-[8px]' : 'text-[9px] md:text-xs'
   const subtitleTracking = compact ? 'tracking-[3px]' : 'tracking-[4px] md:tracking-[6px]'
-  const align = compact ? 'flex-col items-end' : 'flex-col items-end md:ml-16'
+  const align = compact ? 'flex-col items-end' : 'flex-col items-end'
 
   return (
     <div className={`flex ${align}`}>

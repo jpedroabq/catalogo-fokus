@@ -169,9 +169,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.06, ease: [0.25, 0.1, 0.25, 1] }}
-      className="group relative bg-[var(--color-bg-secondary)] rounded-card overflow-hidden hover:shadow-apple-hover transition-shadow duration-400 ease-apple will-change-transform flex flex-col h-full"
+      className="group relative flex h-full flex-col overflow-hidden rounded-card bg-[var(--color-bg-secondary)] transition-shadow duration-400 ease-apple will-change-transform hover:shadow-apple-hover"
     >
-      <div className="aspect-[4/3] shrink-0 relative overflow-hidden bg-[#E4E4E7] select-none group/image" {...cardSwipeHandlers}>
+      <div className="relative aspect-[4/3] shrink-0 overflow-hidden bg-[#E4E4E7] select-none group/image sm:aspect-[5/4]" {...cardSwipeHandlers}>
         {currentImage && !imgFailed && (
           <button
             onClick={() => setLightboxOpen(true)}
@@ -221,9 +221,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         )}
       </div>
 
-      <div className="p-4 md:p-5 space-y-4 flex-1 flex flex-col relative">
+      <div className="relative flex flex-1 flex-col space-y-4 p-4 sm:p-5">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-[17px] font-semibold tracking-[-0.022em] text-[var(--color-text)] leading-tight min-w-0">
+          <h3 className="min-w-0 text-[17px] font-semibold leading-tight tracking-[-0.022em] text-[var(--color-text)]">
             {product.model}
           </h3>
           {BRAND_LOGOS[product.brand.toLowerCase().trim()] && (
@@ -268,7 +268,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           <span className="text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--color-text-secondary)]">
             R$
           </span>
-          <span className="text-[22px] font-bold tracking-[-0.022em] text-[var(--color-text)]">
+          <span className="text-[20px] font-bold tracking-[-0.022em] text-[var(--color-text)] sm:text-[22px]">
             {price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         </div>
