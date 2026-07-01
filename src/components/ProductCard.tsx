@@ -171,7 +171,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       transition={{ duration: 0.5, delay: index * 0.06, ease: [0.25, 0.1, 0.25, 1] }}
       className="group relative flex h-full flex-col overflow-hidden rounded-card bg-[var(--color-bg-secondary)] transition-shadow duration-400 ease-apple will-change-transform hover:shadow-apple-hover"
     >
-      <div className="relative aspect-[4/3] shrink-0 overflow-hidden bg-[#E4E4E7] select-none group/image sm:aspect-[5/4]" {...cardSwipeHandlers}>
+      <div className="relative aspect-[4/3] shrink-0 overflow-hidden bg-[var(--color-bg)] select-none group/image sm:aspect-[5/4]" {...cardSwipeHandlers}>
         {currentImage && !imgFailed && (
           <button
             onClick={() => setLightboxOpen(true)}
@@ -186,7 +186,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: swipeDir === 'left' ? -60 : 60 }}
                 transition={{ duration: 0.2, ease: 'easeOut' }}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain bg-[var(--color-bg)]"
                 onError={() => setImgFailed(true)}
               />
             </AnimatePresence>
